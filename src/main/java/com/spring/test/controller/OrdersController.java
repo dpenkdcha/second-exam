@@ -26,7 +26,7 @@ public class OrdersController {
     public ResponseEntity addOrderDetails(
             @RequestHeader UUID requestId,
             @RequestHeader String createdAt,
-            @RequestBody @Valid OrderInputRequestDto orderInputRequestDto) {
+            @Valid @RequestBody OrderInputRequestDto orderInputRequestDto) {
 
         ordersService.addOrderDetails(orderInputRequestDto, requestId, createdAt);
 

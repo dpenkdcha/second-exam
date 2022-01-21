@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -31,6 +32,8 @@ public class CustomExceptionResponse {
         List<Details> detailsList = ex.getBindingResult()
                 .getFieldErrors().stream()
                 .map(errors -> new Details(errors.getField(),ERROR_CODE_MESSAGE,errors.getDefaultMessage()))
+                .filter(distinctByKey(Details::getField))
+                .sorted(Comparator.comparing(Details::getField))
                 .collect(Collectors.toList());
 
         List<Errors> errorsList = new ArrayList<>();
@@ -40,5 +43,9 @@ public class CustomExceptionResponse {
 
     }
 
+    public static <T> Predicate<T> distinctByKey(Function<T, Object> function) {
+        Set<Object> seen = new HashSet<>();
+        return t -> seen.add(function.apply(t));
+    }
 
 }

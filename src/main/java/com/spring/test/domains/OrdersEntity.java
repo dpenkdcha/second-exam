@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -21,11 +23,11 @@ public class OrdersEntity {
 
     private String purchaseOrderNumber;
 
-    private String shipDate;
+    private Date shipDate;
 
     private String productId;
 
-    private String createdAt;
+    private LocalDateTime createdAt;
 
 
 }
