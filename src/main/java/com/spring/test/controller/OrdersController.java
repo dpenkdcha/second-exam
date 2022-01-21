@@ -28,7 +28,7 @@ public class OrdersController {
             @RequestHeader String createdAt,
             @RequestBody @Valid OrderInputRequestDto orderInputRequestDto) {
 
-        ordersService.addOrderDetails(orderInputRequestDto);
+        ordersService.addOrderDetails(orderInputRequestDto, requestId, createdAt);
 
         return new ResponseEntity(new OrderPostResponse(requestId, createdAt), HttpStatus.CREATED);
     }
