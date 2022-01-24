@@ -1,9 +1,13 @@
 package com.spring.test.service.serviceImpl;
 
 import com.spring.test.domains.OrdersEntity;
+import com.spring.test.domains.ProductEntity;
 import com.spring.test.dtos.request.OrderInputRequestDto;
 import com.spring.test.dtos.request.Orders;
+import com.spring.test.dtos.response.GetAllOrderResponse;
+import com.spring.test.dtos.response.OrderResponse;
 import com.spring.test.repository.OrdersRepository;
+import com.spring.test.repository.ProductRepository;
 import com.spring.test.service.OrdersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,9 +15,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class OrdersServiceImpl implements OrdersService {
 
     private final OrdersRepository ordersRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public void addOrderDetails(OrderInputRequestDto orderInputRequestDto, UUID requestId, String createdAt) {
@@ -45,4 +48,40 @@ public class OrdersServiceImpl implements OrdersService {
         ordersRepository.saveAll(ordersEntityList);
 
     }
+
+    @Override
+    public GetAllOrderResponse getOrderDetails() {
+
+        List<OrdersEntity> ordersEntityList = ordersRepository.findAll();
+
+        List<String> productIdList = new ArrayList<>();
+                ordersEntityList.forEach(
+                ordersEntity -> {
+                    productIdList.add(ordersEntity.getProductId());
+                }
+        );
+
+        List<ProductEntity> productEntities = productRepository.findByProductIdIn(productIdList);
+
+        List<OrderResponse> orderResponseList = ordersEntityList.stream()
+                .map(order -> {
+                    return new OrderResponse(order.getOrderId(),
+                            order.getPurchaseOrderNumber(), order.getShipDate(),
+                            order.getProductId(), "", order.getRequestId(), order.getCreatedAt());
+                }).collect(Collectors.toList());
+
+        return new GetAllOrderResponse(orderResponseList);
+
+
+    }
+
+
+    @Override
+    public GetAllOrderResponse getOrderById(String orderId) {
+
+
+        return null;
+    }
+
+
 }

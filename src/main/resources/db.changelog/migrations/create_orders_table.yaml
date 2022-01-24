@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: ABC
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: request_id
+                  type: uuid
+              - column:
+                  name: order_id
+                  type: varchar(6)
+              - column:
+                  name: purchase_order_number
+                  type: varchar(8)
+              - column:
+                  name: ship_date
+                  type: timestamp
+              - column:
+                  name: product_id
+                  type: varchar(3)
+              - column:
+                  name: created_at
+                  type: timestamp
